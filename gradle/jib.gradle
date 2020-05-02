@@ -1,0 +1,18 @@
+apply plugin: "com.google.cloud.tools.jib"
+
+// Add Jib build Docker image
+jib {
+    from {
+        image = IMAGE
+    }
+    to {
+        image = REPOSITORY
+        auth {
+            username = USERNAME
+            password = PASSWORD
+        }
+    }
+    container {
+        mainClass = project.mainClassName
+    }
+}
