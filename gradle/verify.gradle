@@ -1,18 +1,3 @@
-buildscript {
-    repositories {
-        jcenter()
-        maven {
-            url "https://plugins.gradle.org/m2/"
-        }
-    }
-
-    dependencies {
-        classpath 'de.aaschmid:gradle-cpd-plugin:3.1'
-        classpath "gradle.plugin.com.github.spotbugs.snom:spotbugs-gradle-plugin:4.0.8"
-        classpath "com.netflix.nebula:gradle-lint-plugin:16.8.0"
-    }
-}
-
 def checkstyleEnabled = System.getenv("CHECKSTYLE_ENABLED") ?: project.hasProperty("checkstyleEnabled") ? project.checkstyleEnabled : true
 def jacocoEnabled = System.getenv("JACOCO_ENABLED") ?: project.hasProperty("jacocoEnabled") ? project.jacocoEnabled : true
 def cpdCheckEnabled = System.getenv("CPD_ENABLED") ?: project.hasProperty("cpdCheckEnabled") ? project.cpdCheckEnabled : true
