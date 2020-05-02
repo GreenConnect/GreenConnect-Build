@@ -3,7 +3,6 @@ def jacocoEnabled = System.getenv("JACOCO_ENABLED") ?: project.hasProperty("jaco
 def cpdCheckEnabled = System.getenv("CPD_ENABLED") ?: project.hasProperty("cpdCheckEnabled") ? project.cpdCheckEnabled : true
 def spotBugsEnabled = System.getenv("SPOTBUGS_ENABLED") ?: project.hasProperty("spotBugsEnabled") ? project.spotBugsEnabled : true
 def pmdEnabled = System.getenv("PMD_ENABLED") ?: project.hasProperty("pmdEnabled") ? project.pmdEnabled : true
-def codenarcEnabled = System.getenv("CODENARC_ENABLED") ?: project.hasProperty("codenarcEnabled") ? project.codenarcEnabled : true
 
 if (checkstyleEnabled) {
     apply plugin: 'checkstyle'
@@ -79,8 +78,4 @@ if (spotBugsEnabled) {
 
 if (pmdEnabled) {
     apply plugin: "pmd"
-}
-
-if (codenarcEnabled) {
-    apply plugin: "codenarc"
 }
