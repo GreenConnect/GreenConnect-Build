@@ -11,14 +11,6 @@
  * $ travis encrypt BINTRAY_KEY=...
  *
  */
-buildscript {
-   repositories {
-       jcenter()
-   }
-   dependencies {
-       classpath 'com.bmuschko:gradle-nexus-plugin:2.3.1'
-   }
-}
 
 apply plugin: 'maven-publish'
 apply plugin: 'com.bmuschko.nexus'
