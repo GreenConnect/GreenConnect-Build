@@ -1,0 +1,96 @@
+def checkstyleEnabled = System.getenv("CHECKSTYLE_ENABLED") ?: project.hasProperty("checkstyleEnabled") ? project.checkstyleEnabled : true
+def jacocoEnabled = System.getenv("JACOCO_ENABLED") ?: project.hasProperty("jacocoEnabled") ? project.jacocoEnabled : true
+def cpdCheckEnabled = System.getenv("CPD_ENABLED") ?: project.hasProperty("cpdCheckEnabled") ? project.cpdCheckEnabled : true
+def spotBugsEnabled = System.getenv("SPOTBUGS_ENABLED") ?: project.hasProperty("spotBugsEnabled") ? project.spotBugsEnabled : true
+def pmdEnabled = System.getenv("PMD_ENABLED") ?: project.hasProperty("pmdEnabled") ? project.pmdEnabled : true
+def codenarcEnabled = System.getenv("CODENARC_ENABLED") ?: project.hasProperty("codenarcEnabled") ? project.codenarcEnabled : true
+def lintEnabled = System.getenv("LINT_ENABLED") ?: project.hasProperty("lintEnabled") ? project.lintEnabled : true
+
+if (checkstyleEnabled) {
+    apply plugin: 'checkstyle'
+
+    checkstyle {
+        toolVersion = 8.16
+        configFile = file("${rootDir}/config/checkstyle/checkstyle.xml")
+
+        // Per submodule
+        maxErrors = 1
+        maxWarnings = 10
+
+        showViolations = true
+    }
+
+    checkstyleTest.enabled = false
+}
+
+if (jacocoEnabled) {
+    apply plugin: 'jacoco'
+
+    task applicationCodeCoverageReport(type:JacocoReport) {
+        executionData run
+        sourceSets sourceSets.main
+    }
+
+    jacocoTestReport {
+        reports {
+            xml.enabled true
+        }
+    }
+
+    jacocoTestCoverageVerification {
+        violationRules {
+            rule {
+                limit {
+                    minimum = 0.85
+                }
+            }
+            rule {
+                limit {
+                    counter = 'CLASS'
+                    value = 'MISSEDCOUNT'
+                    maximum = 0
+                }
+            }
+            rule {
+                limit {
+                    counter = 'LINE'
+                    value = 'TOTALCOUNT'
+                    maximum = 500.0
+                }
+            }
+        }
+    }
+}
+
+if (cpdCheckEnabled) {
+    apply plugin: 'cpd'
+
+    cpdCheck {
+        source = sourceSets.main.allJava // only java, groovy and scala classes in 'main' sourceSets
+    }
+}
+
+if (spotBugsEnabled) {
+    apply plugin: "com.github.spotbugs"
+
+    spotbugsMain {
+        reports {
+            html {
+                enabled = true
+                stylesheet = 'fancy-hist.xsl'
+            }
+        }
+    }
+}
+
+if (pmdEnabled) {
+    apply plugin: "pmd"
+}
+
+if (codenarcEnabled) {
+    apply plugin: "codenarc"
+}
+
+if (lintEnabled) {
+    apply plugin: "nebula.lint"
+}
