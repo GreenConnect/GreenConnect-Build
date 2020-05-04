@@ -1,0 +1,17 @@
+repositories {
+    maven {
+        url "http://nexus.greenconnect.tech/repository/maven-public"
+        credentials {           
+            def ossUser = System.getenv("SONATYPE_USERNAME") ?: project.hasProperty("sonatypeOssUsername") ? project.sonatypeOssUsername : ''
+            def ossPass = System.getenv("SONATYPE_PASSWORD") ?: project.hasProperty("sonatypeOssPassword") ? project.sonatypeOssPassword : ''
+
+            username = ossUser
+            password = ossPass
+        }
+        authentication {
+            basic(BasicAuthentication)
+        }
+    }
+    
+    jcenter()
+}
