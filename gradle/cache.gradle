@@ -1,0 +1,22 @@
+boolean isCiServer = System.getenv().containsKey("CI")
+def cacheUrl = System.getenv("GRADLE_CACHE_URL") ?: project.hasProperty("gradleCacheUrl") ? project.gradleCacheUrl : ''
+def cacheUser = System.getenv("GRADLE_CACHE_USERNAME") ?: project.hasProperty("gradleCacheUsername") ? project.gradleCacheUsername : ''
+def cachePass = System.getenv("GRADLE_CACHE_PASSWORD") ?: project.hasProperty("gradleCachePassword") ? project.gradleCachePassword : ''
+
+buildCache {
+    local {
+        enabled = !isCiServer
+    }
+
+    remote(HttpBuildCache) {
+        url = cacheUrl
+        push = isCiServer
+
+        allowUntrustedServer = true
+
+        credentials {
+            username = cacheUser
+            password = cachePass
+        }
+    }
+}
